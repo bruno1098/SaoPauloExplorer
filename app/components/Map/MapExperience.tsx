@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -16,6 +16,7 @@ import MapLoadingScreen from './MapLoadingScreen';
 import { SP_LOCATIONS } from '@/app/data/locations';
 import { MAP_SECTIONS } from '@/app/data/sections';
 import type { MapViewRef } from './types';
+import { useGoogleMaps } from './hooks/useGoogleMaps';
 
 const MapView = dynamic(() => import('./MapView'), {
   ssr: false,
@@ -27,8 +28,15 @@ export default function MapExperience() {
   const [showControls, setShowControls] = useState(false);
   const [showDataPanel, setShowDataPanel] = useState(false);
   const [showLocationDetails, setShowLocationDetails] = useState(false);
-  const [mapType, setMapType] = useState<google.maps.MapTypeId>(google.maps.MapTypeId.ROADMAP);
+  const [mapType, setMapType] = useState<google.maps.MapTypeId | undefined>(undefined);
   const mapRef = React.useRef<MapViewRef>(null);
+  const { isLoaded } = useGoogleMaps();
+
+  useEffect(() => {
+    if (isLoaded) {
+      setMapType(google.maps.MapTypeId.ROADMAP);
+    }
+  }, [isLoaded]);
 
   const handleSectionChange = (sectionId: string) => {
     const index = MAP_SECTIONS.findIndex(section => section.id === sectionId);

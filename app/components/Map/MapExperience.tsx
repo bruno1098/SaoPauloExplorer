@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -22,20 +22,12 @@ const MapView = dynamic(() => import('./MapView'), {
   loading: () => <MapLoadingScreen />,
 });
 
-const MAP_TYPES = {
-  ROADMAP: 'roadmap',
-  SATELLITE: 'satellite',
-  TERRAIN: 'terrain'
-} as const;
-
-type MapType = typeof MAP_TYPES[keyof typeof MAP_TYPES];
-
 export default function MapExperience() {
   const [activeSection, setActiveSection] = useState(0);
   const [showControls, setShowControls] = useState(false);
   const [showDataPanel, setShowDataPanel] = useState(false);
   const [showLocationDetails, setShowLocationDetails] = useState(false);
-  const [mapType, setMapType] = useState<MapType>(MAP_TYPES.ROADMAP);
+  const [mapType, setMapType] = useState<google.maps.MapTypeId>(google.maps.MapTypeId.ROADMAP);
   const mapRef = React.useRef<MapViewRef>(null);
 
   const handleSectionChange = (sectionId: string) => {
@@ -49,9 +41,18 @@ export default function MapExperience() {
     setShowLocationDetails(true);
   };
 
-  const handleMapTypeChange = useCallback((type: MapType) => {
-    setMapType(type);
-  }, []);
+  const handleMapTypeChange = (type: string) => {
+    switch (type) {
+      case 'satellite':
+        setMapType(google.maps.MapTypeId.SATELLITE);
+        break;
+      case 'terrain':
+        setMapType(google.maps.MapTypeId.TERRAIN);
+        break;
+      default:
+        setMapType(google.maps.MapTypeId.ROADMAP);
+    }
+  };
 
   return (
     <div className="relative w-full h-screen overflow-hidden">

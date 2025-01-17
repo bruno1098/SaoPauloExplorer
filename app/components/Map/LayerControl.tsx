@@ -4,23 +4,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Layers, Map as MapIcon, Satellite, Mountain } from 'lucide-react';
 
-const MAP_TYPES = {
-  ROADMAP: 'roadmap',
-  SATELLITE: 'satellite',
-  TERRAIN: 'terrain'
-} as const;
-
-type MapType = typeof MAP_TYPES[keyof typeof MAP_TYPES];
-
 interface LayerControlProps {
-  onMapTypeChange: (type: MapType) => void;
+  onMapTypeChange: (type: string) => void;
 }
 
 export default function LayerControl({ onMapTypeChange }: LayerControlProps) {
   const mapTypes = [
-    { id: MAP_TYPES.ROADMAP, name: "Ruas", icon: <MapIcon className="w-5 h-5" /> },
-    { id: MAP_TYPES.SATELLITE, name: "Satélite", icon: <Satellite className="w-5 h-5" /> },
-    { id: MAP_TYPES.TERRAIN, name: "Terreno", icon: <Mountain className="w-5 h-5" /> }
+    { id: 'roadmap', name: "Ruas", icon: <MapIcon className="w-5 h-5" /> },
+    { id: 'satellite', name: "Satélite", icon: <Satellite className="w-5 h-5" /> },
+    { id: 'terrain', name: "Terreno", icon: <Mountain className="w-5 h-5" /> }
   ];
 
   return (

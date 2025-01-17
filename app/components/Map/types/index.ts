@@ -1,11 +1,9 @@
-import { MapTypeId } from '@react-google-maps/api';
-
 export interface MapViewProps {
   locations: Location[];
   activeLocationId?: string;
   onMarkerClick?: (location: Location) => void;
   className?: string;
-  mapType?: MapTypeId;
+  mapType?: google.maps.MapTypeId;
 }
 
 export interface MapViewRef {
